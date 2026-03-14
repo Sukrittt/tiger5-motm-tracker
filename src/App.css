@@ -295,6 +295,15 @@ select {
   border: 1px solid var(--line);
 }
 
+.avatar.leaderboard-avatar {
+  border-radius: 12px;
+}
+
+.avatar.leaderboard-avatar.motm-avatar {
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(91, 124, 255, 0.45);
+}
+
 .avatar.placeholder {
   display: grid;
   place-items: center;

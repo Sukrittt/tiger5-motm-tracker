@@ -43,8 +43,14 @@ function getAvatarPath(match) {
   const byDate = avatarMap.byDate?.[match.date]
   if (byDate) return `/avatars/${byDate}`
 
+  return getAvatarPathByName(match.winner)
+}
+
+function getAvatarPathByName(name) {
+  if (!name) return null
+
   const fallbackName = Object.entries(avatarMap.byWinner ?? {}).find(
-    ([winner]) => normalizeName(winner) === normalizeName(match.winner),
+    ([winner]) => normalizeName(winner) === normalizeName(name),
   )
 
   return fallbackName ? `/avatars/${fallbackName[1]}` : null
@@ -252,13 +258,31 @@ function App() {
             <p className="empty">No data for selected filters.</p>
           ) : (
             <ol className="leaderboard-list">
-              {leaderboard.map((row, index) => (
-                <li key={row.name}>
-                  <div className="rank-pill">#{index + 1}</div>
-                  <span className="name">{row.name}</span>
-                  <strong className="wins">{row.wins} wins</strong>
-                </li>
-              ))}
+              {leaderboard.map((row, index) => {
+                const avatar = getAvatarPathByName(row.name)
+                const isMotm =
+                  latestWinner &&
+                  normalizeName(latestWinner.winner) === normalizeName(row.name)
+                const avatarClass = `avatar leaderboard-avatar${isMotm ? ' motm-avatar' : ''}`
+
+                return (
+                  <li key={row.name}>
+                    <div className="rank-pill">#{index + 1}</div>
+                    {avatar ? (
+                      <img
+                        src={avatar}
+                        alt={row.name}
+                        className={avatarClass}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className={`${avatarClass} placeholder`}>{getInitials(row.name)}</div>
+                    )}
+                    <span className="name">{row.name}</span>
+                    <strong className="wins">{row.wins} wins</strong>
+                  </li>
+                )
+              })}
             </ol>
           )}
         </article>
