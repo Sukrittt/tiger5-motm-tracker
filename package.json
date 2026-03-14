@@ -1,0 +1,29 @@
+{
+  "name": "tiger5-motm-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "normalize:data": "node scripts/normalizeData.mjs /root/.openclaw/media/inbound/Tiger5_MOTMs---5f68f83f-a064-446b-994b-6d7cc6799477.csv src/data/matches.json",
+    "update:chat": "node scripts/updateFromChat.mjs src/data/matches.json"
+  },
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "vite": "^8.0.0"
+  }
+}
