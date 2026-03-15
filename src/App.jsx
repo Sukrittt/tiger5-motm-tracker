@@ -10,6 +10,7 @@ const THEME_KEY = 'motm-theme'
 const WHATSAPP_INVITE_LINK =
   'https://chat.whatsapp.com/KVHbjabM7dJ8KJ5DyQARHg?mode=gi_t'
 const COVER_IMAGE_PATH = '/cover/tiger5-cover.jpg'
+const VENUE_MAP_LINK = 'https://maps.app.goo.gl/qcWArjBy2LhrnYZb7'
 
 const PRESETS = [
   { id: 'all', label: 'All Time' },
@@ -185,6 +186,63 @@ function AvatarButton({ src, name, initials, className, onClick }) {
   )
 }
 
+function InfoModal({ onClose }) {
+  return (
+    <div className="avatar-modal-backdrop" onClick={onClose}>
+      <div className="info-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="info-modal-header">
+          <h3>Tiger5 Community Rules</h3>
+          <button type="button" className="avatar-modal-close" onClick={onClose} aria-label="Close">&times;</button>
+        </div>
+
+        <div className="info-section">
+          <h4>📋 Slot Booking</h4>
+          <p>{`Slots open every week on Monday evening.\nEach session has a max of 14 players (7v7).\nBook your slot by confirming in the WhatsApp group.\nFirst come, first served — no reservations.\nIf you book and can't make it, cancel ASAP so someone else can join.`}</p>
+        </div>
+
+        <div className="info-section">
+          <h4>❌ Slot Cancellations</h4>
+          <p>{`Cancel at least 4 hours before the game.\nRepeated last-minute cancellations (less than 1 hour) may result in a temporary booking ban.\nIf you no-show without notice twice, you'll be deprioritised for future slots.`}</p>
+        </div>
+
+        <div className="info-section">
+          <h4>⏳ Waitlist</h4>
+          <p>{`If 14 slots are full, you can join the waitlist.\nWaitlisted players get priority if someone cancels.\nWaitlist order is based on when you messaged the group.`}</p>
+        </div>
+
+        <div className="info-section">
+          <h4>🌧️ Weather</h4>
+          <p>{`Games are ON unless there's heavy rain or a thunderstorm warning.\nThe admin will post a weather update 2 hours before the game.\nIf cancelled due to weather, everyone's slot carries over to the next session.`}</p>
+        </div>
+
+        <div className="info-section">
+          <h4>📍 Reaching the Venue</h4>
+          <p>{`The venue is at Tiger5 Football Arena.\nParking is available on-site — arrive 10–15 mins early.\nUse the Google Maps link below for directions.`}</p>
+        </div>
+
+        <div className="info-section">
+          <h4>⚽ Game Rules</h4>
+          <p>{`7-a-side format, 2 halves of 25 minutes each.\nNo slide tackles.\nGoalkeeper rotation every half unless agreed otherwise.\nMan of the Match (MOTM) is voted by players after the game.\nRespect the ref's call — even if there's no ref, play fair.`}</p>
+        </div>
+
+        <div className="info-actions">
+          <a href={WHATSAPP_INVITE_LINK} target="_blank" rel="noreferrer" className="cta-btn">
+            <WhatsAppIcon />
+            Join WhatsApp Group
+          </a>
+          <a href={VENUE_MAP_LINK} target="_blank" rel="noreferrer" className="cta-btn info-map-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            View Location
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function AvatarModal({ player, onClose }) {
   if (!player) return null
   return (
@@ -207,6 +265,7 @@ function App() {
   const [selectedPlayer, setSelectedPlayer] = useState('all')
   const [preset, setPreset] = useState('all')
   const [viewingPlayer, setViewingPlayer] = useState(null)
+  const [showInfo, setShowInfo] = useState(false)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -267,6 +326,7 @@ function App() {
   return (
     <main className="app-shell">
       <AvatarModal player={viewingPlayer} onClose={() => setViewingPlayer(null)} />
+      {showInfo && <InfoModal onClose={() => setShowInfo(false)} />}
 
       <header className="topbar card">
         <div>
@@ -290,6 +350,13 @@ function App() {
             backgroundImage: `linear-gradient(120deg, rgba(9,12,20,.75), rgba(91,124,255,.45)), url(${COVER_IMAGE_PATH})`,
           }}
         >
+          <button type="button" className="info-btn" onClick={() => setShowInfo(true)} aria-label="Community rules & info">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </button>
           <span className="hero-badge">Tiger5 Football Community</span>
           <h2>Man of the Match Tracker</h2>
           <p>Live leaderboard, recent winners, and streak insights in one clean view.</p>

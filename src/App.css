@@ -128,6 +128,7 @@ select,
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  position: relative;
 }
 
 .hero-card p {
@@ -458,6 +459,108 @@ select {
   cursor: pointer;
   padding: 4px 8px;
   line-height: 1;
+}
+
+/* Info Button */
+.info-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  color: #f8fbff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.info-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 12px rgba(91, 124, 255, 0.4);
+}
+
+.info-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Info Modal */
+.info-modal {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  text-align: left;
+}
+
+.info-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.info-modal-header h3 {
+  font-size: 1.15rem;
+}
+
+.info-section {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.info-section:last-of-type {
+  border-bottom: none;
+}
+
+.info-section h4 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.info-section p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: pre-line;
+  line-height: 1.55;
+}
+
+.info-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.info-actions .cta-btn {
+  flex: 1;
+  min-width: 160px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.info-map-btn {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.info-map-btn:hover {
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
 }
 
 @keyframes fadeIn {
