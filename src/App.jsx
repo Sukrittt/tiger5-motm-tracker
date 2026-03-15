@@ -195,6 +195,7 @@ function InfoModal({ onClose }) {
           <button type="button" className="avatar-modal-close" onClick={onClose} aria-label="Close">&times;</button>
         </div>
 
+        <div className="info-modal-body">
         <div className="info-section">
           <h4>📋 Slot Booking</h4>
           <p>{`Slots open every week on Monday evening.\nEach session has a max of 14 players (7v7).\nBook your slot by confirming in the WhatsApp group.\nFirst come, first served — no reservations.\nIf you book and can't make it, cancel ASAP so someone else can join.`}</p>
@@ -223,6 +224,7 @@ function InfoModal({ onClose }) {
         <div className="info-section">
           <h4>⚽ Game Rules</h4>
           <p>{`7-a-side format, 2 halves of 25 minutes each.\nNo slide tackles.\nGoalkeeper rotation every half unless agreed otherwise.\nMan of the Match (MOTM) is voted by players after the game.\nRespect the ref's call — even if there's no ref, play fair.`}</p>
+        </div>
         </div>
 
         <div className="info-actions">
