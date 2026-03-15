@@ -268,6 +268,7 @@ function App() {
   const [preset, setPreset] = useState('all')
   const [viewingPlayer, setViewingPlayer] = useState(null)
   const [showInfo, setShowInfo] = useState(false)
+  const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -401,39 +402,52 @@ function App() {
         </article>
       </section>
 
-      <section className="card filters-bar" aria-label="Filters">
-        <div className="filter-group">
-          <label htmlFor="player-filter">Player</label>
-          <select
-            id="player-filter"
-            value={selectedPlayer}
-            onChange={(event) => setSelectedPlayer(event.target.value)}
-          >
-            <option value="all">All Players</option>
-            {playerOptions.map((player) => (
-              <option key={player} value={player}>
-                {player}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="preset-wrap" role="group" aria-label="Date presets">
-          {PRESETS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`chip ${preset === item.id ? 'chip-active' : ''}`}
-              onClick={() => setPreset(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-
-        <button type="button" className="reset-btn" onClick={resetFilters}>
-          Reset
+      <section className={`card filters-bar ${showFilters ? 'filters-open' : ''}`} aria-label="Filters">
+        <button type="button" className="filters-toggle" onClick={() => setShowFilters((v) => !v)}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          </svg>
+          Filters
+          {(selectedPlayer !== 'all' || preset !== 'all') && <span className="filters-badge" />}
+          <svg className="filters-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
         </button>
+
+        <div className="filters-content">
+          <div className="filter-group">
+            <label htmlFor="player-filter">Player</label>
+            <select
+              id="player-filter"
+              value={selectedPlayer}
+              onChange={(event) => setSelectedPlayer(event.target.value)}
+            >
+              <option value="all">All Players</option>
+              {playerOptions.map((player) => (
+                <option key={player} value={player}>
+                  {player}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="preset-wrap" role="group" aria-label="Date presets">
+            {PRESETS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`chip ${preset === item.id ? 'chip-active' : ''}`}
+                onClick={() => setPreset(item.id)}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          <button type="button" className="reset-btn" onClick={resetFilters}>
+            Reset
+          </button>
+        </div>
       </section>
 
       <p className="section-label">Rankings & History</p>
