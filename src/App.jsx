@@ -445,11 +445,7 @@ function App() {
           <strong>{totalMatches}</strong>
         </article>
         <article className="card stat-card">
-          <span>Unique Winners</span>
-          <strong>{uniqueWinners}</strong>
-        </article>
-        <article className="card stat-card">
-          <span>Top Winner</span>
+          <span>Most MOTMs</span>
           <strong>{topWinner ? `${topWinner.name} (${topWinner.wins})` : '—'}</strong>
         </article>
         <article className="card stat-card">
@@ -457,12 +453,16 @@ function App() {
           <strong>{latestWinner?.winner ?? '—'}</strong>
         </article>
         <article className="card stat-card">
-          <span>Longest Streak</span>
-          <strong>{longestStreak.count > 0 ? `${longestStreak.player} (${longestStreak.count})` : '—'}</strong>
+          <span>Most Goals</span>
+          <strong>{topScorer ? `${topScorer.name} (${topScorer.total})` : '—'}</strong>
         </article>
         <article className="card stat-card">
-          <span>Rising Star</span>
-          <strong>{risingStar?.name ?? '—'}</strong>
+          <span>Most Assists</span>
+          <strong>{topAssister ? `${topAssister.name} (${topAssister.total})` : '—'}</strong>
+        </article>
+        <article className="card stat-card">
+          <span>Most G/A</span>
+          <strong>{mostVersatile ? `${mostVersatile.name} (${mostVersatile.total})` : '—'}</strong>
         </article>
       </section>
 
