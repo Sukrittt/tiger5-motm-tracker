@@ -261,7 +261,7 @@ function AvatarModal({ player, onClose }) {
 }
 
 function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) ?? 'light')
+  const [theme, setTheme] = useState(() => localStorage.getItem(THEME_KEY) ?? 'dark')
   const [selectedPlayer, setSelectedPlayer] = useState('all')
   const [preset, setPreset] = useState('all')
   const [viewingPlayer, setViewingPlayer] = useState(null)
