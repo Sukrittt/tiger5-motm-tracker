@@ -71,6 +71,18 @@ function computeLeaderboard(matches) {
     .sort((a, b) => b.wins - a.wins || a.name.localeCompare(b.name))
 }
 
+function computeStatLeaderboard(matches, field) {
+  const totals = new Map()
+  for (const match of matches) {
+    for (const entry of match[field] ?? []) {
+      totals.set(entry.player, (totals.get(entry.player) ?? 0) + entry.count)
+    }
+  }
+  return [...totals.entries()]
+    .map(([name, total]) => ({ name, total }))
+    .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name))
+}
+
 function computeLongestStreak(matches) {
   if (!matches.length) return { player: '—', count: 0 }
 
@@ -269,6 +281,7 @@ function App() {
   const [viewingPlayer, setViewingPlayer] = useState(null)
   const [showInfo, setShowInfo] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
+  const [activeTab, setActiveTab] = useState('motm')
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -280,10 +293,15 @@ function App() {
     [],
   )
 
-  const playerOptions = useMemo(
-    () => [...new Set(allMatches.map((match) => match.winner))].sort(),
-    [],
-  )
+  const playerOptions = useMemo(() => {
+    const names = new Set()
+    for (const match of allMatches) {
+      names.add(match.winner)
+      for (const g of match.goals ?? []) names.add(g.player)
+      for (const a of match.assists ?? []) names.add(a.player)
+    }
+    return [...names].sort()
+  }, [])
 
   const filteredMatches = useMemo(
     () =>
@@ -295,12 +313,50 @@ function App() {
     [preset, selectedPlayer, sortedAsc],
   )
 
+  const filteredMatchesForStats = useMemo(
+    () =>
+      sortedAsc.filter((match) => {
+        const byPreset = isInPreset(match.date, preset)
+        if (!byPreset) return false
+        if (selectedPlayer === 'all') return true
+        const inGoals = (match.goals ?? []).some((g) => g.player === selectedPlayer)
+        const inAssists = (match.assists ?? []).some((a) => a.player === selectedPlayer)
+        return inGoals || inAssists
+      }),
+    [preset, selectedPlayer, sortedAsc],
+  )
+
   const filteredDesc = useMemo(
     () => [...filteredMatches].sort((a, b) => b.date.localeCompare(a.date)),
     [filteredMatches],
   )
 
   const leaderboard = useMemo(() => computeLeaderboard(filteredMatches), [filteredMatches])
+  const goalLeaderboard = useMemo(() => computeStatLeaderboard(filteredMatchesForStats, 'goals'), [filteredMatchesForStats])
+  const assistLeaderboard = useMemo(() => computeStatLeaderboard(filteredMatchesForStats, 'assists'), [filteredMatchesForStats])
+
+  const contributionLeaderboard = useMemo(() => {
+    const totals = new Map()
+    for (const match of filteredMatchesForStats) {
+      for (const entry of match.goals ?? []) {
+        const prev = totals.get(entry.player) ?? { goals: 0, assists: 0 }
+        prev.goals += entry.count
+        totals.set(entry.player, prev)
+      }
+      for (const entry of match.assists ?? []) {
+        const prev = totals.get(entry.player) ?? { goals: 0, assists: 0 }
+        prev.assists += entry.count
+        totals.set(entry.player, prev)
+      }
+    }
+    return [...totals.entries()]
+      .map(([name, { goals, assists }]) => ({ name, goals, assists, total: goals + assists }))
+      .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name))
+  }, [filteredMatchesForStats])
+
+  const topScorer = goalLeaderboard[0] ?? null
+  const topAssister = assistLeaderboard[0] ?? null
+  const mostVersatile = contributionLeaderboard[0] ?? null
 
   const totalMatches = filteredMatches.length
   const uniqueWinners = leaderboard.length
@@ -335,15 +391,23 @@ function App() {
         <div>
           <p className="eyebrow">Tiger5</p>
           <h1>MOTM Dashboard v2</h1>
+          <span className="last-updated last-updated-mobile">
+            Updated {new Date(matchesData.generatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </span>
         </div>
-        <button
-          className="theme-toggle"
-          type="button"
-          onClick={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))}
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-        </button>
+        <div className="topbar-right">
+          <span className="last-updated last-updated-desktop">
+            Updated {new Date(matchesData.generatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </span>
+          <button
+            className="theme-toggle"
+            type="button"
+            onClick={() => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+          </button>
+        </div>
       </header>
 
       <section className="hero-grid">
@@ -450,7 +514,14 @@ function App() {
         </div>
       </section>
 
-      <p className="section-label">Rankings & History</p>
+      <div className="section-tabs">
+        <button type="button" className={`tab ${activeTab === 'motm' ? 'tab-active' : ''}`} onClick={() => setActiveTab('motm')}>MOTM</button>
+        <button type="button" className={`tab ${activeTab === 'goals' ? 'tab-active' : ''}`} onClick={() => setActiveTab('goals')}>Goals</button>
+        <button type="button" className={`tab ${activeTab === 'assists' ? 'tab-active' : ''}`} onClick={() => setActiveTab('assists')}>Assists</button>
+        <button type="button" className={`tab ${activeTab === 'ga' ? 'tab-active' : ''}`} onClick={() => setActiveTab('ga')}>G/A</button>
+      </div>
+
+      {activeTab === 'motm' && (
       <section className="content-grid">
         <article className="card">
           <h3>Leaderboard</h3>
@@ -518,6 +589,298 @@ function App() {
           )}
         </article>
       </section>
+      )}
+
+      {activeTab === 'goals' && (
+      <section className="content-grid">
+        <article className="card">
+          <h3>Goals Leaderboard</h3>
+          {goalLeaderboard.length === 0 ? (
+            <p className="empty">No goals data for selected filters.</p>
+          ) : (
+            <ol className="leaderboard-list">
+              {goalLeaderboard.map((row, index) => {
+                const avatar = getAvatarPathByName(row.name)
+                return (
+                  <li key={row.name}>
+                    <div className="rank-pill">#{index + 1}</div>
+                    <AvatarButton
+                      src={avatar}
+                      name={row.name}
+                      initials={getInitials(row.name)}
+                      className="avatar leaderboard-avatar"
+                      onClick={() => openAvatar(row.name, avatar)}
+                    />
+                    <span className="name">{row.name}</span>
+                    <strong className="wins">{row.total} {row.total === 1 ? 'goal' : 'goals'}</strong>
+                  </li>
+                )
+              })}
+            </ol>
+          )}
+        </article>
+
+        <div className="right-stack">
+          <article className="card">
+            <h3>Goals Distribution</h3>
+            {goalLeaderboard.length === 0 ? (
+              <p className="empty">No data.</p>
+            ) : (
+              <ul className="bar-chart">
+                {goalLeaderboard.map((row) => (
+                  <li key={row.name}>
+                    <span className="bar-label">{row.name}</span>
+                    <div className="bar-track">
+                      <div
+                        className="bar-fill"
+                        style={{ width: `${(row.total / goalLeaderboard[0].total) * 100}%` }}
+                      />
+                    </div>
+                    <span className="bar-count">{row.total}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+
+          <article className="card top-performers">
+            <h3>Top Performers</h3>
+            <div className="top-performers-grid">
+              <div className="top-performer-item">
+                <span className="top-performer-label">Top Scorer</span>
+                {topScorer ? <>
+                  <AvatarButton
+                    src={getAvatarPathByName(topScorer.name)}
+                    name={topScorer.name}
+                    initials={getInitials(topScorer.name)}
+                    className="avatar top-performer-avatar"
+                    onClick={() => openAvatar(topScorer.name, getAvatarPathByName(topScorer.name))}
+                  />
+                  <strong>{topScorer.name}</strong>
+                  <span className="top-performer-stat">{topScorer.total} {topScorer.total === 1 ? 'goal' : 'goals'}</span>
+                </> : <strong>—</strong>}
+              </div>
+              <div className="top-performer-item">
+                <span className="top-performer-label">Top Assister</span>
+                {topAssister ? <>
+                  <AvatarButton
+                    src={getAvatarPathByName(topAssister.name)}
+                    name={topAssister.name}
+                    initials={getInitials(topAssister.name)}
+                    className="avatar top-performer-avatar"
+                    onClick={() => openAvatar(topAssister.name, getAvatarPathByName(topAssister.name))}
+                  />
+                  <strong>{topAssister.name}</strong>
+                  <span className="top-performer-stat">{topAssister.total} {topAssister.total === 1 ? 'assist' : 'assists'}</span>
+                </> : <strong>—</strong>}
+              </div>
+              <div className="top-performer-item">
+                <span className="top-performer-label">Most Versatile</span>
+                {mostVersatile ? <>
+                  <AvatarButton
+                    src={getAvatarPathByName(mostVersatile.name)}
+                    name={mostVersatile.name}
+                    initials={getInitials(mostVersatile.name)}
+                    className="avatar top-performer-avatar"
+                    onClick={() => openAvatar(mostVersatile.name, getAvatarPathByName(mostVersatile.name))}
+                  />
+                  <strong>{mostVersatile.name}</strong>
+                  <span className="top-performer-stat">{mostVersatile.total} G/A</span>
+                </> : <strong>—</strong>}
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+      )}
+
+      {activeTab === 'assists' && (
+      <section className="content-grid">
+        <article className="card">
+          <h3>Assists Leaderboard</h3>
+          {assistLeaderboard.length === 0 ? (
+            <p className="empty">No assists data for selected filters.</p>
+          ) : (
+            <ol className="leaderboard-list">
+              {assistLeaderboard.map((row, index) => {
+                const avatar = getAvatarPathByName(row.name)
+                return (
+                  <li key={row.name}>
+                    <div className="rank-pill">#{index + 1}</div>
+                    <AvatarButton
+                      src={avatar}
+                      name={row.name}
+                      initials={getInitials(row.name)}
+                      className="avatar leaderboard-avatar"
+                      onClick={() => openAvatar(row.name, avatar)}
+                    />
+                    <span className="name">{row.name}</span>
+                    <strong className="wins">{row.total} {row.total === 1 ? 'assist' : 'assists'}</strong>
+                  </li>
+                )
+              })}
+            </ol>
+          )}
+        </article>
+
+        <div className="right-stack">
+          <article className="card">
+            <h3>Assists Distribution</h3>
+            {assistLeaderboard.length === 0 ? (
+              <p className="empty">No data.</p>
+            ) : (
+              <ul className="bar-chart">
+                {assistLeaderboard.map((row) => (
+                  <li key={row.name}>
+                    <span className="bar-label">{row.name}</span>
+                    <div className="bar-track">
+                      <div
+                        className="bar-fill"
+                        style={{ width: `${(row.total / assistLeaderboard[0].total) * 100}%` }}
+                      />
+                    </div>
+                    <span className="bar-count">{row.total}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+
+          <article className="card top-performers">
+            <h3>Top Performers</h3>
+            <div className="top-performers-grid">
+              <div className="top-performer-item">
+                <span className="top-performer-label">Top Scorer</span>
+                {topScorer ? <>
+                  <AvatarButton
+                    src={getAvatarPathByName(topScorer.name)}
+                    name={topScorer.name}
+                    initials={getInitials(topScorer.name)}
+                    className="avatar top-performer-avatar"
+                    onClick={() => openAvatar(topScorer.name, getAvatarPathByName(topScorer.name))}
+                  />
+                  <strong>{topScorer.name}</strong>
+                  <span className="top-performer-stat">{topScorer.total} {topScorer.total === 1 ? 'goal' : 'goals'}</span>
+                </> : <strong>—</strong>}
+              </div>
+              <div className="top-performer-item">
+                <span className="top-performer-label">Top Assister</span>
+                {topAssister ? <>
+                  <AvatarButton
+                    src={getAvatarPathByName(topAssister.name)}
+                    name={topAssister.name}
+                    initials={getInitials(topAssister.name)}
+                    className="avatar top-performer-avatar"
+                    onClick={() => openAvatar(topAssister.name, getAvatarPathByName(topAssister.name))}
+                  />
+                  <strong>{topAssister.name}</strong>
+                  <span className="top-performer-stat">{topAssister.total} {topAssister.total === 1 ? 'assist' : 'assists'}</span>
+                </> : <strong>—</strong>}
+              </div>
+              <div className="top-performer-item">
+                <span className="top-performer-label">Most Versatile</span>
+                {mostVersatile ? <>
+                  <AvatarButton
+                    src={getAvatarPathByName(mostVersatile.name)}
+                    name={mostVersatile.name}
+                    initials={getInitials(mostVersatile.name)}
+                    className="avatar top-performer-avatar"
+                    onClick={() => openAvatar(mostVersatile.name, getAvatarPathByName(mostVersatile.name))}
+                  />
+                  <strong>{mostVersatile.name}</strong>
+                  <span className="top-performer-stat">{mostVersatile.total} G/A</span>
+                </> : <strong>—</strong>}
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+      )}
+
+      {activeTab === 'ga' && (
+      <section className="content-grid">
+        <article className="card">
+          <h3>G/A Leaderboard</h3>
+          {contributionLeaderboard.length === 0 ? (
+            <p className="empty">No data for selected filters.</p>
+          ) : (
+            <ol className="leaderboard-list">
+              {contributionLeaderboard.map((row, index) => {
+                const avatar = getAvatarPathByName(row.name)
+                return (
+                  <li key={row.name}>
+                    <div className="rank-pill">#{index + 1}</div>
+                    <AvatarButton
+                      src={avatar}
+                      name={row.name}
+                      initials={getInitials(row.name)}
+                      className="avatar leaderboard-avatar"
+                      onClick={() => openAvatar(row.name, avatar)}
+                    />
+                    <span className="name">{row.name}</span>
+                    <strong className="wins">{row.total} G/A</strong>
+                  </li>
+                )
+              })}
+            </ol>
+          )}
+        </article>
+
+        <div className="right-stack">
+          <article className="card">
+            <h3>G/A Distribution</h3>
+            {contributionLeaderboard.length === 0 ? (
+              <p className="empty">No data.</p>
+            ) : (
+              <ul className="bar-chart">
+                {contributionLeaderboard.map((row) => (
+                  <li key={row.name}>
+                    <span className="bar-label">{row.name}</span>
+                    <div className="bar-track">
+                      <div
+                        className="bar-fill"
+                        style={{ width: `${(row.total / contributionLeaderboard[0].total) * 100}%` }}
+                      />
+                    </div>
+                    <span className="bar-count">{row.total}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+
+          <article className="card">
+            <h3>Goals vs Assists Breakdown</h3>
+            <div className="bar-legend">
+              <span className="legend-item"><span className="legend-dot legend-dot-goals" /> Goals</span>
+              <span className="legend-item"><span className="legend-dot legend-dot-assists" /> Assists</span>
+            </div>
+            {contributionLeaderboard.length === 0 ? (
+              <p className="empty">No data.</p>
+            ) : (
+              <ul className="stacked-bar-chart">
+                {contributionLeaderboard.map((row) => (
+                  <li key={row.name}>
+                    <span className="bar-label">{row.name}</span>
+                    <div className="bar-track">
+                      <div
+                        className="bar-fill-goals"
+                        style={{ width: `${(row.goals / contributionLeaderboard[0].total) * 100}%` }}
+                      />
+                      <div
+                        className="bar-fill-assists"
+                        style={{ width: `${(row.assists / contributionLeaderboard[0].total) * 100}%` }}
+                      />
+                    </div>
+                    <span className="bar-count">{row.total}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        </div>
+      </section>
+      )}
 
       <p className="section-label" id="insights">Insights</p>
       <section className="insights-grid">
