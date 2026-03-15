@@ -526,7 +526,7 @@ function App() {
         <article className="card">
           <h3>Leaderboard</h3>
           {leaderboard.length === 0 ? (
-            <p className="empty">No data for selected filters.</p>
+            <p className="empty">No data yet. Will be updated soon!</p>
           ) : (
             <ol className="leaderboard-list">
               {leaderboard.map((row, index) => {
@@ -596,7 +596,7 @@ function App() {
         <article className="card">
           <h3>Goals Leaderboard</h3>
           {goalLeaderboard.length === 0 ? (
-            <p className="empty">No goals data for selected filters.</p>
+            <p className="empty">No goals data yet. Will be updated soon!</p>
           ) : (
             <ol className="leaderboard-list">
               {goalLeaderboard.map((row, index) => {
@@ -624,7 +624,7 @@ function App() {
           <article className="card">
             <h3>Goals Distribution</h3>
             {goalLeaderboard.length === 0 ? (
-              <p className="empty">No data.</p>
+              <p className="empty">No data yet. Will be updated soon!</p>
             ) : (
               <ul className="bar-chart">
                 {goalLeaderboard.map((row) => (
@@ -699,7 +699,7 @@ function App() {
         <article className="card">
           <h3>Assists Leaderboard</h3>
           {assistLeaderboard.length === 0 ? (
-            <p className="empty">No assists data for selected filters.</p>
+            <p className="empty">No assists data yet. Will be updated soon!</p>
           ) : (
             <ol className="leaderboard-list">
               {assistLeaderboard.map((row, index) => {
@@ -727,7 +727,7 @@ function App() {
           <article className="card">
             <h3>Assists Distribution</h3>
             {assistLeaderboard.length === 0 ? (
-              <p className="empty">No data.</p>
+              <p className="empty">No data yet. Will be updated soon!</p>
             ) : (
               <ul className="bar-chart">
                 {assistLeaderboard.map((row) => (
@@ -802,7 +802,7 @@ function App() {
         <article className="card">
           <h3>G/A Leaderboard</h3>
           {contributionLeaderboard.length === 0 ? (
-            <p className="empty">No data for selected filters.</p>
+            <p className="empty">No data yet. Will be updated soon!</p>
           ) : (
             <ol className="leaderboard-list">
               {contributionLeaderboard.map((row, index) => {
@@ -830,7 +830,7 @@ function App() {
           <article className="card">
             <h3>G/A Distribution</h3>
             {contributionLeaderboard.length === 0 ? (
-              <p className="empty">No data.</p>
+              <p className="empty">No data yet. Will be updated soon!</p>
             ) : (
               <ul className="bar-chart">
                 {contributionLeaderboard.map((row) => (
@@ -856,7 +856,7 @@ function App() {
               <span className="legend-item"><span className="legend-dot legend-dot-assists" /> Assists</span>
             </div>
             {contributionLeaderboard.length === 0 ? (
-              <p className="empty">No data.</p>
+              <p className="empty">No data yet. Will be updated soon!</p>
             ) : (
               <ul className="stacked-bar-chart">
                 {contributionLeaderboard.map((row) => (
@@ -928,7 +928,7 @@ function App() {
         <article className="card">
           <h3>Win Distribution</h3>
           {leaderboard.length === 0 ? (
-            <p className="empty">No data.</p>
+            <p className="empty">No data yet. Will be updated soon!</p>
           ) : (
             <ul className="bar-chart">
               {leaderboard.map((row) => (
