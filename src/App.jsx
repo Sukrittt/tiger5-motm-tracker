@@ -390,7 +390,7 @@ function App() {
       <header className="topbar card">
         <div>
           <p className="eyebrow">Tiger5</p>
-          <h1>MOTM Dashboard v2</h1>
+          <h1>Tiger5 Football Dashboard</h1>
           <span className="last-updated last-updated-mobile">
             Updated {new Date(matchesData.generatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
           </span>
