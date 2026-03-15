@@ -25,6 +25,24 @@ function normalizeName(name) {
     .replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
+function parseStats(cell) {
+  if (!cell) return []
+  return cell
+    .split(';')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [nameRaw, countRaw] = entry.split(':').map((chunk) => chunk.trim())
+      if (!nameRaw) return null
+      const count = Number.parseInt(countRaw, 10)
+      return {
+        player: normalizeName(nameRaw),
+        count: Number.isFinite(count) && count > 0 ? count : 1,
+      }
+    })
+    .filter(Boolean)
+}
+
 const matches = []
 for (const row of rows) {
   const cols = row.split(',').map((c) => c.trim())
@@ -39,6 +57,8 @@ for (const row of rows) {
     date: isoDate,
     winner: normalizeName(winnerRaw),
     source: 'csv-import',
+    goals: parseStats(cols[2]),
+    assists: parseStats(cols[3]),
   })
 }
 

@@ -1,57 +1,220 @@
 {
-  "generatedAt": "2026-03-15T16:11:30.000Z",
+  "generatedAt": "2026-03-15T16:28:53.232Z",
   "totalMatches": 10,
   "matches": [
     {
       "date": "2026-01-17",
       "winner": "Shivansh",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Shivansh",
+          "count": 2
+        },
+        {
+          "player": "Rama",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Joe",
+          "count": 1
+        },
+        {
+          "player": "Nitin",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-01-24",
       "winner": "Sidharth",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Sidharth",
+          "count": 1
+        },
+        {
+          "player": "Atharva",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Shivansh",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-01-31",
       "winner": "Shivansh",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Shivansh",
+          "count": 3
+        }
+      ],
+      "assists": [
+        {
+          "player": "Spandan",
+          "count": 1
+        },
+        {
+          "player": "Rama",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-02-07",
       "winner": "Nitin",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Nitin",
+          "count": 2
+        },
+        {
+          "player": "Anshul",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Joe",
+          "count": 2
+        }
+      ]
     },
     {
       "date": "2026-02-08",
       "winner": "Shivansh",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Shivansh",
+          "count": 1
+        },
+        {
+          "player": "Atharva",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Nitin",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-02-14",
       "winner": "Atharva",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Atharva",
+          "count": 2
+        },
+        {
+          "player": "Rama",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Shivansh",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-02-28",
       "winner": "Spandan",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Spandan",
+          "count": 2
+        }
+      ],
+      "assists": [
+        {
+          "player": "Anshul",
+          "count": 1
+        },
+        {
+          "player": "Joe",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-03-07",
       "winner": "Rama",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Rama",
+          "count": 2
+        },
+        {
+          "player": "Shivansh",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Spandan",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-03-12",
       "winner": "Joe",
-      "source": "csv-import"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Joe",
+          "count": 1
+        },
+        {
+          "player": "Nitin",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Rama",
+          "count": 1
+        }
+      ]
     },
     {
       "date": "2026-03-14",
       "winner": "Anshul",
-      "source": "chat-update",
-      "updatedAt": "2026-03-14T17:40:47.738Z"
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Anshul",
+          "count": 2
+        },
+        {
+          "player": "Atharva",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Shivansh",
+          "count": 1
+        }
+      ]
     }
   ]
 }
