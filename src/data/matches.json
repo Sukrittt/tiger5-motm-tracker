@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-03-15T16:28:53.232Z",
-  "totalMatches": 10,
+  "generatedAt": "2026-03-24T08:43:08.315Z",
+  "totalMatches": 13,
   "matches": [
     {
       "date": "2026-01-17",
@@ -52,6 +52,13 @@
       "assists": []
     },
     {
+      "date": "2026-03-01",
+      "winner": "Parthesh",
+      "source": "csv-import",
+      "goals": [],
+      "assists": []
+    },
+    {
       "date": "2026-03-07",
       "winner": "Rama",
       "source": "csv-import",
@@ -71,6 +78,64 @@
       "source": "csv-import",
       "goals": [],
       "assists": []
+    },
+    {
+      "date": "2026-03-20",
+      "winner": "Sam",
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Rohan",
+          "count": 1
+        }
+      ],
+      "assists": [
+        {
+          "player": "Rohan",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "date": "2026-03-22",
+      "winner": "Siddharth",
+      "source": "csv-import",
+      "goals": [
+        {
+          "player": "Joe",
+          "count": 5
+        },
+        {
+          "player": "Tarun",
+          "count": 1
+        },
+        {
+          "player": "Rohan",
+          "count": 1
+        },
+        {
+          "player": "Shubhanshu",
+          "count": 2
+        }
+      ],
+      "assists": [
+        {
+          "player": "Joe",
+          "count": 3
+        },
+        {
+          "player": "Tarun",
+          "count": 1
+        },
+        {
+          "player": "Rohan",
+          "count": 2
+        },
+        {
+          "player": "Shubhanshu",
+          "count": 2
+        }
+      ]
     }
   ]
 }

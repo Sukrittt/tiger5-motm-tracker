@@ -1,6 +1,9 @@
 {
   "byDate": {
-    "2026-03-14": "anshul.jpg"
+    "2026-03-14": "anshul.jpg",
+    "2026-03-01": "parthesh.jpg",
+    "2026-03-20": "sam.jpg",
+    "2026-03-22": "siddharth.jpg"
   },
   "byWinner": {
     "Shivansh": "shivansh.jpg",
@@ -14,6 +17,7 @@
     "Rama": "rama.jpg",
     "Parthesh": "parthesh.jpg",
     "Nand": "nand.jpg",
-    "Spandan": "spandan.jpg"
+    "Spandan": "spandan.jpg",
+    "Sam": "sam.jpg"
   }
 }
