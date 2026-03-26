@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "normalize:data": "node scripts/normalizeData.mjs /root/.openclaw/media/inbound/Tiger5_MOTMs---5f68f83f-a064-446b-994b-6d7cc6799477.csv src/data/matches.json",
+    "normalize:data": "node scripts/normalizeData.mjs data-source.csv src/data/matches.json",
     "update:chat": "node scripts/updateFromChat.mjs src/data/matches.json"
   },
   "dependencies": {
