@@ -516,9 +516,6 @@ function App() {
 
       <div className="section-tabs">
         <button type="button" className={`tab ${activeTab === 'motm' ? 'tab-active' : ''}`} onClick={() => setActiveTab('motm')}>MOTM</button>
-        <button type="button" className={`tab ${activeTab === 'goals' ? 'tab-active' : ''}`} onClick={() => setActiveTab('goals')}>Goals</button>
-        <button type="button" className={`tab ${activeTab === 'assists' ? 'tab-active' : ''}`} onClick={() => setActiveTab('assists')}>Assists</button>
-        <button type="button" className={`tab ${activeTab === 'ga' ? 'tab-active' : ''}`} onClick={() => setActiveTab('ga')}>G/A</button>
       </div>
 
       {activeTab === 'motm' && (
